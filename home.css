@@ -1,0 +1,59 @@
+
+header p{
+	color:white;
+	font-size:1.3rem;
+	position:relative;
+	top:0.4rem;
+}
+
+.dropdown {
+	position:relative;
+	top:3rem;
+	left:30%;
+}
+input{
+	line-height:2.8rem;
+	position:relative;
+	top:-0.3rem;
+}
+#submit{
+	position:relative;
+	top:-0.33rem;
+	height:3.3rem;
+	left:45%;
+}
+#containerMovies{
+	display:none;
+	position:relative;
+	left:25%;
+	top:4rem;
+}
+.poster{
+float:left;
+margin-right:2rem;
+}
+#containerMovies p{
+color:black;
+display:table;
+width:50rem;
+}
+.metascore{
+	background-color:green;
+	display:block;
+	width:5rem;
+	height:5rem;
+	padding:2rem;
+}
+#imdb{
+	width:5rem;
+	height:5rem;
+}
+.carousel-inner > .item > img,
+  .carousel-inner > .item > a > img {
+      width: 300px !important;
+      margin: auto;
+     height: 400px !important;
+  }
+  .show-read-more .more-text{
+        display: none;
+    }
