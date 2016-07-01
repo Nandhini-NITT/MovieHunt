@@ -15,11 +15,11 @@
 	<nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Movie Buzz</a>
+      <a class="navbar-brand" href="#" id='home'>Movie Buzz</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active" id='movies'><a>Movies</a></li>
-      <li id='series'><a>Series</a></li>
+      <li class="active" id='movies'><a href="#">Movies</a></li>
+      <li id='series'><a href="#">Series</a></li>
     </ul>
   </div>
 </nav>
@@ -36,27 +36,26 @@
 				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" required>
 				<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
 		</form>
-		<div id="containerseries">
-			
+		
 		<div id="containerMovies">
-			<span class="title">Title</span>(<span class="year"></span>)
-			<span class="poster">Poster</span>
-			<span class="genre">Genre</span>
-			<span class="description">Description</span>
-			<span class="directors">Directors</span>
-			<span class="writers">Writers</span>
-			<span class="Stars">Stars</span>
-			<span class="awards">Awards</span>
-			<span class="boxoffice">Box Office</span>
+			<span class="Title">Title</span>(<span class="year"></span>)
+			<span class="Poster">Poster</span>
+			<span class="Genre">Genre</span>
+			<span class="Plot">Description</span>
+			<span class="Director">Directors</span>
+			<span class="Writer">Writers</span>
+			<span class="Actors">Stars</span>
+			<span class="Awards">Awards</span>
+			<span class="Boxoffice">Box Office</span>
 			<br>
 			<table>
 				<tr>
-					<td><span class="metascore">Metascore</span></td>
-					<td>&nbsp Metascore</td>
+					<td><span class="Metascore">Metascore</span></td>
+					<td class="Metascore-title">&nbsp Metascore</td>
 					<td><img src="imdb.jpg" id='imdb'></td>
-					<td><span class='imdbrating'>IMDb</span></td>
+					<td><span class='imdbRating'>IMDb</span></td>
 					<td><img src="imdb poll.jpg" id='imdb'></td>
-					<td><span class='imdbpoll'>IMDb</span></td>
+					<td><span class='imdbVotes'>IMDb</span></td>
 				</tr>
 			</table>
 		</div>
@@ -72,12 +71,14 @@
       <li data-target="#myCarousel" data-slide-to="2"></li>
       <li data-target="#myCarousel" data-slide-to="3"></li>
 	  <li data-target="#myCarousel" data-slide-to="4"></li>
-    </ol>
+	  <li data-target="#myCarousel" data-slide-to="5"></li>
+	  <li data-target="#myCarousel" data-slide-to="6"></li>
+	</ol>
 
     <!-- Wrapper for slides -->
     <div class="carousel-inner" role="listbox">
       <div class="item active">
-        <img src="movies.jpg" alt="Chania" width="300" height="300">
+        <img src="movies.jpg" alt="Movies" width="300" height="300" id='first'>
       </div>
     </div>
 

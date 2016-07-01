@@ -28,7 +28,7 @@ input{
 	left:25%;
 	top:4rem;
 }
-.poster{
+.Poster{
 float:left;
 margin-right:2rem;
 }
@@ -37,7 +37,7 @@ color:black;
 display:table;
 width:50rem;
 }
-.metascore{
+.Metascore{
 	background-color:green;
 	display:block;
 	width:5rem;
