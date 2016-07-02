@@ -1,14 +1,27 @@
 var Url,type="movie";
-
+var search_length=0;
 function changevalue(str)
 {
 	document.getElementById("selecttype").innerHTML=str;
-	$("input").val('');
-	$("input").attr("placeholder","Enter "+str);
+	$("#name").val('');
+	$("#name").attr("placeholder","Enter "+str);
 	if(str=="Title")
 		Url='https://www.omdbapi.com/?t=';
 	else if(str=="IMDB id")
 		Url='https://www.omdbapi.com/?i=';
+}
+function yearcheck()
+{
+	if(document.getElementById('year').value.length==4)
+		showsuggestions();
+}
+function setYear()
+{
+	$("#getyear").html("<input type='text' id='year' placeholder='Year of release' onkeyup='yearcheck();'>&nbsp<button style='position:relative;top:-0.1px' class='btn btn-danger' onClick='showyear();'><span class='glyphicon glyphicon-minus'></span></button>");
+}
+function showyear()
+{
+	$('#getyear').html('<button class="btn btn-primary"  onClick="setYear();"><span class="glyphicon glyphicon-plus"></span></button>Add Year for More refined search');
 }
 function carouselSetup(){
 	if(type=="series")
@@ -88,16 +101,24 @@ $(document).ready(function(){
 	
 	
 });
-function sendData()
+function sendData(i)
 {
-	document.getElementById("name").value=this.innerHTML;
+	document.getElementById("name").value=document.getElementById("result"+i).innerHTML;
 	getData();
 }
 function showsuggestions()
 { 
+	var Url='https://www.omdbapi.com/?s=';
 	$("#myCarousel").show();
 	var sMovie=document.getElementById("name").value;
-	var sUrl='https://www.omdbapi.com/?s='+sMovie+'&type='+type+'&tomatoes=true&plot=full';
+	year=$('#year').val()||0;
+	if(year==0)
+		sUrl=Url+sMovie+'&type='+type+'&tomatoes=true&plot=full';
+	else
+	sUrl = Url + sMovie + '&type='+type+'&y='+year+'&tomatoes=true&plot=full';
+	
+	//else
+	
 	if(sMovie.length>2)
 	{
 	$('#containerMovies').hide();
@@ -107,21 +128,21 @@ function showsuggestions()
 			complete: function(p_oXHR,p_sStatus){
 					odata=$.parseJSON(p_oXHR.responseText);
 					$("#output").show();
+					search_length=odata.totalResults;
 					if(odata.Error==="Movie not found!")
 						$("#output").html("<li>No record found<li>");
 					else
 						{	
 							$(".suggest").empty();
-							$("#output").append('<ul class="dropdown-menu">');
+							//$("#output").append('<ul class="dropdown-menu">');
 							for(var i=0;i<odata.totalResults;i++)
 							{
-								
-								$("#output").append("<li id='suggestions'>"+odata.Search[i].Title+"</li>");
+								if(i==0)
+								$("#output").append("<li><a href='#' class='.active' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"</a></li>");
+								else
+									$("#output").append("<li><a href='#' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"</a></li>");
 							}
-							var LI=document.getElementById("output").getElementsByTagName("li");
-							for (var i=0; i<LI.length; i++) {
-						LI[i].addEventListener('click', sendData, false);
-								}
+							
 						}
 					}
 					});
@@ -134,7 +155,11 @@ function getData()
 	$Container.hide();
 	$("#output").hide();
 	sMovie = $('#name').val();
-    sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full';
+	year=$('#year').val();
+	if(!$("#year").is(":empty"))
+	sUrl = Url + sMovie + '&type='+type+'y='+year+'&tomatoes=true&plot=full';
+	else
+	sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full';
     $.ajax(sUrl, {
         complete: function(p_oXHR, p_sStatus){
             oData = $.parseJSON(p_oXHR.responseText);
@@ -152,7 +177,12 @@ function getData()
 						if(prop=="Metascore")
 							$(".Metascore-title").hide();
 					}
-
+					else
+					{
+						$("."+prop).show();
+						if(prop=="Metascore")
+							$(".Metascore-title").show();
+					}
 				}	
 				$Container.find(".Title").html('<b>'+oData.Title+'</b>');
 				$Container.find('.Year').text(oData.Year);

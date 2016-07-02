@@ -34,7 +34,9 @@
 			</ul>
 		</div>
 		<form>
-				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" required>
+				<span id='showyear'></span>
+				<span id='getyear'style="position:absolute;top:16.5%;left:10%;"><button class="btn btn-primary"  onClick="setYear();"><span class="glyphicon glyphicon-plus"></span></button>Add Year for More refined search</span>
+				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" >
 				<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
 		</form>
 		<div id="output" class='suggest'></div>
