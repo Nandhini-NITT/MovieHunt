@@ -1,17 +1,5 @@
 var Url,type="movie";
-function hide (elements) {
-  elements = elements.length ? elements : [elements];
-  alert(elements.length);
-  for (var index = 0; index < elements.length; index++) {
-    elements[index].style.display = 'none';
-  }
-}
-function unhide (elements) {
-  elements = elements.length ? elements : [elements];
-  for (var index = 0; index < elements.length; index++) {
-    elements[index].style.display = 'inline';
-  }
-}
+
 function changevalue(str)
 {
 	document.getElementById("selecttype").innerHTML=str;
@@ -80,6 +68,7 @@ $(document).ready(function(){
 						$("#containerMovies").hide();
 						$("#myCarousel").show();
 						type="series";
+						$("#name").val("");
 						carouselSetup();
 						});
 	$("#movies").click(function(event){
@@ -91,16 +80,61 @@ $(document).ready(function(){
 						$("#containerMovies").hide();
 						$("#myCarousel").show();
 						type="movie";
+						$("#name").val("");
 						carouselSetup();
 						}
 						});
+	
+	
+	
 });
+function sendData()
+{
+	document.getElementById("name").value=this.innerHTML;
+	getData();
+}
+function showsuggestions()
+{ 
+	$("#myCarousel").show();
+	var sMovie=document.getElementById("name").value;
+	var sUrl='https://www.omdbapi.com/?s='+sMovie+'&type='+type+'&tomatoes=true&plot=full';
+	if(sMovie.length>2)
+	{
+	$('#containerMovies').hide();
+	$("#myCarousel").hide();
+	$("#output").append('<ul class="dropdown-menu">');
+	$.ajax(sUrl,{
+			complete: function(p_oXHR,p_sStatus){
+					odata=$.parseJSON(p_oXHR.responseText);
+					$("#output").show();
+					if(odata.Error==="Movie not found!")
+						$("#output").html("<li>No record found<li>");
+					else
+						{	
+							$(".suggest").empty();
+							$("#output").append('<ul class="dropdown-menu">');
+							for(var i=0;i<odata.totalResults;i++)
+							{
+								
+								$("#output").append("<li id='suggestions'>"+odata.Search[i].Title+"</li>");
+							}
+							var LI=document.getElementById("output").getElementsByTagName("li");
+							for (var i=0; i<LI.length; i++) {
+						LI[i].addEventListener('click', sendData, false);
+								}
+						}
+					}
+					});
+	}
+}
+	
 function getData()
 {	
 	$Container = $('#containerMovies');
 	$Container.hide();
+	$("#output").hide();
 	sMovie = $('#name').val();
-    sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full'
+    sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full';
     $.ajax(sUrl, {
         complete: function(p_oXHR, p_sStatus){
             oData = $.parseJSON(p_oXHR.responseText);

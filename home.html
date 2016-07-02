@@ -23,6 +23,7 @@
     </ul>
   </div>
 </nav>
+	
 	<div class="contents">
 		<div class="dropdown">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span id='selecttype'>Search</span>
@@ -33,10 +34,10 @@
 			</ul>
 		</div>
 		<form>
-				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" required>
+				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" required>
 				<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
 		</form>
-		
+		<div id="output" class='suggest'></div>
 		<div id="containerMovies">
 			<span class="Title">Title</span>(<span class="year"></span>)
 			<span class="Poster">Poster</span>
