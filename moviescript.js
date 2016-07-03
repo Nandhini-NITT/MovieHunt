@@ -249,15 +249,22 @@ function getData()
 					{
 						if(oData[prop]==="N/A")
 						{
+							if(prop=="Poster")
+								oData[prop]="Not available.png";
+							else
 							$("."+prop).hide();
 							if(prop=="Metascore")
 								$(".Metascore-title").hide();
+							else if(prop=='imdbRating')
+								{$('#imdb').hide();$('#imdbpoll').hide();}
 						}	
 						else
 						{
 							$("."+prop).show();
 							if(prop=="Metascore")
 								$(".Metascore-title").show();
+							else if(prop=='imdbRating')
+								{$('#imdb').show();$('#imdbpoll').show();}
 						}
 					}	
 					$Container.find(".Title").html('<b>'+oData.Title+'</b>');
