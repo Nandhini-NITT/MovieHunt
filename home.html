@@ -13,33 +13,35 @@
 </head>
 <body>
 	<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#" id='home'>Movie Buzz</a>
-    </div>
-    <ul class="nav navbar-nav">
-      <li class="active" id='movies'><a href="#">Movies</a></li>
-      <li id='series'><a href="#">Series</a></li>
-    </ul>
-  </div>
-</nav>
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="#" id='home'>Movie Buzz</a>
+			</div>
+		<ul class="nav navbar-nav">
+			<li class="active" id='movies'><a href="#">Movies</a></li>
+			<li id='series'><a href="#">Series</a></li>
+		</ul>
+		</div>
+	</nav>
 	
 	<div class="contents">
 		<div class="dropdown">
 			<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><span id='selecttype'>Search</span>
-			<span class="caret"></span></button>
+				<span class="caret"></span>
+			</button>
 			<ul class="dropdown-menu">
 				<li id="IMDb"><a>IMDb Id</a></li>
 				<li id="Title"><a>Title</a></li>
 			</ul>
 		</div>
 		<span id='showyear'></span>
-				<span id='getyear'style="position:absolute;top:16.5%;left:10%;"><button class="btn btn-primary"  onClick="setYear();"><span class="glyphicon glyphicon-plus"></span></button>Add Year for More refined search</span>
+		<span id='getyear'style="position:absolute;top:16.5%;left:10%;"><button class="btn btn-primary"  onClick="setYear();"><span class="glyphicon glyphicon-plus"></span></button>Add Year for More refined search</span>
 		<form>
-				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" >
-				<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
+			<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" >
+			<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
 		</form>
-		<div id="output" class='suggest'></div>
+		<div id="output" class='suggest'>
+		</div>
 		<div id='page-results'>
 			<table id='showPages'>
 				<thead>
@@ -47,47 +49,21 @@
 					<th>IMDB ID</th>
 					<th>Year</th>
 				</thead>
-			<tbody><tr></tr><tr></tr>
-			</tbody>
+				<tbody>
+				</tbody>
 			</table>
 		</div>
 		<div id='episodes'>
-		<table id='episode-list'>
-			<thead>
-			<th>Title</th>
-			<th>IMDB ID</th>
-			</thead>
-			<tbody>
-			</tbody>
-		</table>
+			<table id='episode-list'>
+				<thead>
+					<th>Title</th>
+					<th>IMDB ID</th>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
 		</div>
-		<div id="compare">
-	<table>
-		<thead>
-			<tr>
-			<th colspan='10'>Film</th>
-			<th><img src='imdb.jpg' width='30px'></th>
-			<th><img src='rotten-tomato.jpg' width='30px'></th>
-			<th><img src='meta.jpg' width=30px></th>
-			</tr>
-		</thead>
-		<tbody>
-			<td rowspan='5'><div class="Image"></div><div class='Title'></div>
-				<div class='Plot'></div>
-			</td>
-			<td>
-				<div class='imdbRating'></div>
-			</td>
-			<td>
-				<div class='tomatoRating'></div>
-			</td>
-			<td>
-				<div class='Metascore'></div>
-			</td>
-		</tbody>
 		
-	</table>
-</div>
 		<div id="containerMovies">
 			<span class="Title">Title</span>(<span class="year"></span>)
 			<span class="Poster">Poster</span>
@@ -116,33 +92,33 @@
   <br>
   <div id="myCarousel" class="carousel slide" data-ride="carousel">
     <!-- Indicators -->
-    <ol class="carousel-indicators">
-      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-      <li data-target="#myCarousel" data-slide-to="1"></li>
-      <li data-target="#myCarousel" data-slide-to="2"></li>
-      <li data-target="#myCarousel" data-slide-to="3"></li>
-	  <li data-target="#myCarousel" data-slide-to="4"></li>
-	  <li data-target="#myCarousel" data-slide-to="5"></li>
-	  <li data-target="#myCarousel" data-slide-to="6"></li>
-	</ol>
+		<ol class="carousel-indicators">
+			<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+			<li data-target="#myCarousel" data-slide-to="1"></li>
+			<li data-target="#myCarousel" data-slide-to="2"></li>
+			<li data-target="#myCarousel" data-slide-to="3"></li>
+			<li data-target="#myCarousel" data-slide-to="4"></li>
+			<li data-target="#myCarousel" data-slide-to="5"></li>
+			<li data-target="#myCarousel" data-slide-to="6"></li>
+		</ol>
 
     <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
-      <div class="item active">
-        <img src="movies.jpg" alt="Movies" width="300" height="300" id='first'>
-      </div>
-    </div>
+		<div class="carousel-inner" role="listbox">
+			<div class="item active">
+			<img src="movies.jpg" alt="Movies" width="300" height="300" id='first'>
+			</div>
+		</div>
 
     <!-- Left and right controls -->
-    <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-      <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
-  </div>
+		<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+		<span class="sr-only">Previous</span>
+		</a>
+		<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+		<span class="sr-only">Next</span>
+		</a>
+	</div>
 </div>
 </body>
 </html>
