@@ -1,5 +1,6 @@
 var Url,type="movie";
 var search_length=0;
+var page=1;
 function changevalue(str)
 {
 	document.getElementById("selecttype").innerHTML=str;
@@ -53,7 +54,8 @@ for(var i=0;i<6;i++)
 	}
 }
 $(document).ready(function(){
-	
+	$('#compare').hide();
+	$('#showPages').hide();
 	carouselSetup();
 	$('form').submit(function(event){
 					event.preventDefault();
@@ -106,6 +108,52 @@ function sendData(i)
 	document.getElementById("name").value=document.getElementById("result"+i).innerHTML;
 	getData();
 }
+function loadPages()
+{
+	$('#output').hide();
+	$('#compare').hide();
+	$('#showPages').hide();
+	var sMovie=document.getElementById("name").value;
+	sUrl='https://www.omdbapi.com/?s='+sMovie+'&type='+type+'&plot=short';
+	var no_of_pages=Math.floor(search_length/10);
+	no_of_pages+=1;
+	$('#showPages tbody').empty();
+	$('#movePage').remove();
+	if(page<=no_of_pages)
+	{
+	sUrl+='&page='+page;
+	$.ajax(sUrl,{
+			complete:function(p_oXHR,p_sStatus){
+					$('#showPages').show();
+					$('.suggest').empty;
+					$('#pageResult').show();
+					oData=$.parseJSON(p_oXHR.responseText);
+					//console.log(oData);
+					for(var i=0;i<10;i++)
+					{
+					if(oData.Search[i].Poster==='N/A')
+						oData.Search[i].Poster='Not available.png';
+					$("#showPages > tbody").append("<tr><td><img src='"+oData.Search[i].Poster+"'></td><td>"+oData.Search[i].Title+"</td><td>"+oData.Search[i].imdbID+"</td><td>"+oData.Search[i].Year+"</td></tr>");
+					}
+					if(page>1)
+					$('#page-results').append("<ul id='movePage' class='pager'><li><a href='#' onClick='PageBack();return false;'>Previous</a></li><li><a href='#'onClick='PageAdd();return false;'>Next</a></li></ul>");
+					else
+					$('#page-results').append('<ul id="movePage" class="pager"><li><a href="#" onClick="PageAdd();return false;">Next</a></li></ul>');
+					}
+				});
+	
+	}
+	}
+	function PageAdd()
+	{
+		page+=1;
+		loadPages();
+	}
+	function PageBack()
+	{
+		page-=1;
+		loadPages();
+	}
 function showsuggestions()
 { 
 	var Url='https://www.omdbapi.com/?s=';
@@ -116,10 +164,7 @@ function showsuggestions()
 		sUrl=Url+sMovie+'&type='+type+'&tomatoes=true&plot=full';
 	else
 	sUrl = Url + sMovie + '&type='+type+'&y='+year+'&tomatoes=true&plot=full';
-	
-	//else
-	
-	if(sMovie.length>2)
+if(sMovie.length>2)
 	{
 	$('#containerMovies').hide();
 	$("#myCarousel").hide();
@@ -134,15 +179,18 @@ function showsuggestions()
 					else
 						{	
 							$(".suggest").empty();
-							//$("#output").append('<ul class="dropdown-menu">');
-							for(var i=0;i<odata.totalResults;i++)
+							var upperlimit=10;
+							if(search_length<upperlimit)
+								upperlimit=search_length;
+							for(var i=0;i<upperlimit;i++)
 							{
 								if(i==0)
-								$("#output").append("<li><a href='#' class='.active' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"</a></li>");
+								$("#output").append("<li><a href='#' class='.active' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"("+odata.Search[i].Year+")</a></li>");
 								else
-									$("#output").append("<li><a href='#' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"</a></li>");
+									$("#output").append("<li><a href='#' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"("+odata.Search[i].Year+")</a></li>");
 							}
-							
+							if(i==10)
+									$("#output").append("<li><a href='#' onClick='loadPages();return false;'>See More</a></li>");
 						}
 					}
 					});
@@ -155,64 +203,79 @@ function getData()
 	$Container.hide();
 	$("#output").hide();
 	sMovie = $('#name').val();
-	year=$('#year').val();
-	if(!$("#year").is(":empty"))
-	sUrl = Url + sMovie + '&type='+type+'y='+year+'&tomatoes=true&plot=full';
-	else
-	sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full';
-    $.ajax(sUrl, {
+	var index=sMovie.indexOf('(')
+	if(index!==-1)
+		{
+			Movie=sMovie.substr(0,sMovie.indexOf('('));
+			var regExp = /\(([^)]+)\)/;
+			var matches = regExp.exec(sMovie);
+			year=matches[1];
+			sUrl = Url + Movie + '&type='+type+'&y='+year+'&tomatoes=true&plot=full';
+		}
+		else 
+		{
+			if($('#getyear').is(":visible"))
+			{
+				year=$('#year').val();
+				sUrl = Url + sMovie + '&type='+type+'&y='+year+'&tomatoes=true&plot=full';
+			}
+			else
+				sUrl = Url + sMovie + '&type='+type+'&tomatoes=true&plot=full';
+		}
+	$.ajax(sUrl, {
         complete: function(p_oXHR, p_sStatus){
             oData = $.parseJSON(p_oXHR.responseText);
 			if(oData.Response==="False")
 				alert("No record found");
-			else
-			{
-				$Container.show();
-				$("#myCarousel").hide();
-				for(var prop in oData)
+			
+				else
 				{
-					if(oData[prop]==="N/A")
+					$Container.show();
+					$("#myCarousel").hide();
+					for(var prop in oData)
 					{
-						$("."+prop).hide();
-						if(prop=="Metascore")
-							$(".Metascore-title").hide();
-					}
-					else
+						if(oData[prop]==="N/A")
+						{
+							$("."+prop).hide();
+							if(prop=="Metascore")
+								$(".Metascore-title").hide();
+						}	
+						else
+						{
+							$("."+prop).show();
+							if(prop=="Metascore")
+								$(".Metascore-title").show();
+						}
+					}	
+					$Container.find(".Title").html('<b>'+oData.Title+'</b>');
+					$Container.find('.Year').text(oData.Year);
+					$Container.find('.Poster').html('<img src="' + oData.Poster + '"/>');
+					$Container.find('.Genre').html('<br/><b>Genre</b><p>'+oData.Genre+'</p>');
+					$Container.find('.Director').html('<b>Directors</b><p>'+oData.Director+'</p>');
+					$Container.find('.Actors').html('<b>Stars</b><p>'+oData.Actors+'</p>');
+					$Container.find('.Writer').html('<b>Writers:</b><p>'+oData.Writer+'</p>');
+					$Container.find('.Awards').html('<b>Awards:</b><p>'+oData.Awards+'</p>');
+					$Container.find('.BoxOffice').html('<b>Box Office Collection:</b><p>'+oData.BoxOffice+'</p>');
+					$Container.find('.Metascore').html('<p>'+oData.Metascore+'</p>');
+					$Container.find('.imdbVotes').html('<p>'+oData.imdbVotes+'</p>');
+					$Container.find('.imdbRating').html('<p>&nbsp'+oData.imdbRating+'/10<span style=”color:#ffaa00”>&#9733;</span></p>');
+					var max_length=200;
+					if(oData.Plot.length>max_length)
 					{
-						$("."+prop).show();
-						if(prop=="Metascore")
-							$(".Metascore-title").show();
-					}
-				}	
-				$Container.find(".Title").html('<b>'+oData.Title+'</b>');
-				$Container.find('.Year').text(oData.Year);
-				$Container.find('.Poster').html('<img src="' + oData.Poster + '"/>');
-				$Container.find('.Genre').html('<br/><b>Genre</b><p>'+oData.Genre+'</p>');
-				$Container.find('.Director').html('<b>Directors</b><p>'+oData.Director+'</p>');
-				$Container.find('.Actors').html('<b>Stars</b><p>'+oData.Actors+'</p>');
-				$Container.find('.Writer').html('<b>Writers:</b><p>'+oData.Writer+'</p>');
-				$Container.find('.Awards').html('<b>Awards:</b><p>'+oData.Awards+'</p>');
-				$Container.find('.BoxOffice').html('<b>Box Office Collection:</b><p>'+oData.BoxOffice+'</p>');
-				$Container.find('.Metascore').html('<p>'+oData.Metascore+'</p>');
-				$Container.find('.imdbVotes').html('<p>'+oData.imdbVotes+'</p>');
-				$Container.find('.imdbRating').html('<p>&nbsp'+oData.imdbRating+'/10<span style=”color:#ffaa00”>&#9733;</span></p>');
-				var max_length=200;
-				if(oData.Plot.length>max_length)
-				{
-					var short_content=oData.Plot.substr(0,max_length);
-					var long_content=oData.Plot.substr(max_length);
-					$Container.find('.Plot').html("<p><b>Plot:</b></p><p style='display:table;width:40rem'>"+short_content+
+						var short_content=oData.Plot.substr(0,max_length);
+						var long_content=oData.Plot.substr(max_length);
+						$Container.find('.Plot').html("<p><b>Plot:</b></p><p style='display:table;width:40rem'>"+short_content+
 						 '<a href="#" id="read_more"> &nbsp Read More</a>'+
 						 '<span id="more_text" style="display:none;">'+long_content+'</span></p>');
-					$Container.find('#read_more').click(function(event){ 
-					event.preventDefault(); 
-					$("#read_more").hide(); /* hide the read more button */
-					$Container.find('#more_text').show(); /* show the .more_text span */
-					});
-				}
-			else
-			$Container.find('.Plot').html("<p style='color:black'>Plot:</p><p style='color:black;display:table;width:40rem'>"+oData.Plot+"</p>");
-        
+						$Container.find('#read_more').click(function(event){ 
+						event.preventDefault(); 
+						$("#read_more").hide(); /* hide the read more button */
+						$Container.find('#more_text').show(); /* show the .more_text span */
+						});
+					}
+					else
+						$Container.find('.Plot').html("<p style='color:black'>Plot:</p><p style='color:black;display:table;width:40rem'>"+oData.Plot+"</p>");
+				
 			}
 		}
     });    

@@ -33,13 +33,51 @@
 				<li id="Title"><a>Title</a></li>
 			</ul>
 		</div>
-		<form>
-				<span id='showyear'></span>
+		<span id='showyear'></span>
 				<span id='getyear'style="position:absolute;top:16.5%;left:10%;"><button class="btn btn-primary"  onClick="setYear();"><span class="glyphicon glyphicon-plus"></span></button>Add Year for More refined search</span>
+		<form>
 				<input id="name" type="text" value="" name="name" style="position:relative;left:40%" autocomplete="off" onkeyup="showsuggestions();" >
 				<button class="btn btn-primary" type="button" id="submit" name="submit" value="submit">Submit</button>
 		</form>
 		<div id="output" class='suggest'></div>
+		<div id='page-results'>
+			<table id='showPages'>
+				<thead>
+					<th colspan='2'>Film</th>
+					<th>IMDB ID</th>
+					<th>Year</th>
+				</thead>
+			<tbody><tr></tr><tr></tr>
+			</tbody>
+			</table>
+		</div>
+		<div id="compare">
+	<table>
+		<thead>
+			<tr>
+			<th colspan='10'>Film</th>
+			<th><img src='imdb.jpg' width='30px'></th>
+			<th><img src='rotten-tomato.jpg' width='30px'></th>
+			<th><img src='meta.jpg' width=30px></th>
+			</tr>
+		</thead>
+		<tbody>
+			<td rowspan='5'><div class="Image"></div><div class='Title'></div>
+				<div class='Plot'></div>
+			</td>
+			<td>
+				<div class='imdbRating'></div>
+			</td>
+			<td>
+				<div class='tomatoRating'></div>
+			</td>
+			<td>
+				<div class='Metascore'></div>
+			</td>
+		</tbody>
+		
+	</table>
+</div>
 		<div id="containerMovies">
 			<span class="Title">Title</span>(<span class="year"></span>)
 			<span class="Poster">Poster</span>

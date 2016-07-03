@@ -150,3 +150,25 @@ width:50rem;
     -o-box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
     box-shadow: inset 0 1px rgba(255, 255, 255, 0.2), 0 1px rgba(0, 0, 0, 0.08);
 }
+#showPages{
+position:relative;
+left:30%;
+background-color:burlywood;
+}
+#showPages td{
+
+padding:1rem;
+}
+#showpages th{
+padding:1rem;
+}
+#showPages th{
+text-align:left;
+}
+#showpages img{
+width:150;
+height:300;
+}
+#compare{
+position:absolute;
+}
