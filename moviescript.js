@@ -13,6 +13,11 @@ function changevalue(str)
 }
 function addRowHandlers() {
     var rows = document.getElementById("showPages").rows;
+	for (var i = 1; i < rows.length; i++) {
+                rows[i].style.cursor = "pointer";
+                rows[i].onmousemove = function () { this.style.backgroundColor = "#ffad60"; this.style.color = "#FFFFFF"; };
+                rows[i].onmouseout = function () { this.style.backgroundColor = ""; this.style.color = ""; };
+            }
     for (i = 0; i < rows.length; i++) {
         rows[i].onclick = function(){ return function(){
                var id = this.cells[2].innerHTML;
@@ -135,11 +140,12 @@ function loadPages()
 	if(page<=no_of_pages)
 	{
 	sUrl+='&page='+page;
+	
 	$.ajax(sUrl,{
 			complete:function(p_oXHR,p_sStatus){
 					$('#showPages').show();
+					$('#page-results').show();
 					$('.suggest').empty;
-					$('#pageResult').show();
 					oData=$.parseJSON(p_oXHR.responseText);
 					for(var i=0;i<10;i++)
 					{
