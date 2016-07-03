@@ -43,6 +43,16 @@ width:50rem;
 	height:5rem;
 	padding:2rem;
 }
+#episode-list{
+position:relative;
+background-color:burlywood;
+border-spacing:1rem;
+border-collapse:separate;
+left:40%;
+}
+#episode-list th{
+border-bottom:2px solid black;
+}
 #imdb,#imdbpoll{
 	width:5rem;
 	height:5rem;

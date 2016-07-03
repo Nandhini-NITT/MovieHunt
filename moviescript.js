@@ -1,4 +1,4 @@
-var Url,type="movie";
+var Url,sUrl,type="movie";
 var search_length=0;
 var page=1;
 function changevalue(str)
@@ -11,13 +11,25 @@ function changevalue(str)
 	else if(str=="IMDB id")
 		Url='https://www.omdbapi.com/?i=';
 }
-function addRowHandlers() {
-    var rows = document.getElementById("showPages").rows;
+function getEpisode(id)
+{
+	var sUrl='https://www.omdbapi.com/?i='+id;
+	getData();
+}
+				
+function addRowHandlers(str) 
+{
+var rows;
+		if(str=='movie')
+			rows= document.getElementById("showPages").rows;
+		else rows=document.getElementById("episode-list").rows;
 	for (var i = 1; i < rows.length; i++) {
                 rows[i].style.cursor = "pointer";
                 rows[i].onmousemove = function () { this.style.backgroundColor = "#ffad60"; this.style.color = "#FFFFFF"; };
                 rows[i].onmouseout = function () { this.style.backgroundColor = ""; this.style.color = ""; };
             }
+	if(str=='movie')
+	{
     for (i = 0; i < rows.length; i++) {
         rows[i].onclick = function(){ return function(){
                var id = this.cells[2].innerHTML;
@@ -27,7 +39,23 @@ function addRowHandlers() {
 				$('#page-results').hide();
 				getData();
         };}(rows[i]);
-    }
+	}
+	}
+	else
+	{
+		for (i = 0; i < rows.length; i++) {
+        rows[i].onclick = function(){ return function(){
+               var id = this.cells[1].innerHTML;
+				Url='https://www.omdbapi.com/?i=';
+				document.getElementById("name").value=id;
+				document.getElementById("selecttype").innerHTML="IMDB id";
+				$('#page-results').hide();
+				$('#search_season').hide();
+				getData();
+        };}(rows[i]);
+		}
+	}
+	
 }
 function yearcheck()
 {
@@ -61,8 +89,6 @@ for(var i=0;i<6;i++)
 		$.ajax(sUrl,{
 				complete: function(p_oXHR,p_sStatus){
 							oData=$.parseJSON(p_oXHR.responseText);
-							//console.log(oData);
-							//console.log(oData.Search);
 							if(oData.Search[rand].Poster!="N/A")
 							$(".carousel-inner").append('<div class="item"><img src="' + oData.Search[rand].Poster + '"/></div>');
 							else 
@@ -74,6 +100,7 @@ for(var i=0;i<6;i++)
 $(document).ready(function(){
 	$('#compare').hide();
 	$('#showPages').hide();
+	$('#episode-list').hide();
 	carouselSetup();
 	$('form').submit(function(event){
 					event.preventDefault();
@@ -153,7 +180,7 @@ function loadPages()
 						oData.Search[i].Poster='Not available.png';
 					$("#showPages > tbody").append("<tr><td><img src='"+oData.Search[i].Poster+"'></td><td>"+oData.Search[i].Title+"</td><td>"+oData.Search[i].imdbID+"</td><td>"+oData.Search[i].Year+"</td></tr>");
 					}
-					addRowHandlers();
+					addRowHandlers('movie');
 					if(page>1)
 					$('#page-results').append("<ul id='movePage' class='pager'><li><a href='#' onClick='PageBack();return false;'>Previous</a></li><li><a href='#'onClick='PageAdd();return false;'>Next</a></li></ul>");
 					else
@@ -215,12 +242,37 @@ if(sMovie.length>2)
 					});
 	}
 }
-	
+function list_episodes()
+{
+	var i=0;
+	var season=$('#season').val();
+	$('#search_season').hide();
+	sUrl+='&Season='+season;
+	$('#output').hide();
+	$.ajax(sUrl,{
+			complete:function(p_oXHR, p_sStatus){
+            oData = $.parseJSON(p_oXHR.responseText);
+			if(oData.Response==='False')
+				alert("Season not found");
+			else
+				{
+					$('#episode-list').show();
+					while(i<oData.Episodes.length)
+					{
+						$('#episode-list tbody').append('<tr><td>'+oData.Episodes[i].Title+'</td><td>'+oData.Episodes[i].imdbID+'</td></tr>');
+						i++;
+					}
+					addRowHandlers("series");
+				}
+			}
+		});
+}
 function getData()
 {	
 	$Container = $('#containerMovies');
 	$Container.hide();
 	$("#output").hide();
+	$("#search_season").hide();
 	sMovie = $('#name').val();
 	var index=sMovie.indexOf('(')
 	if(index!==-1)
@@ -274,6 +326,9 @@ function getData()
 						}
 					}	
 					$Container.find(".Title").html('<b>'+oData.Title+'</b>');
+					if(type=='series')
+					$Container.find('.Year').text(oData.Released);
+					else
 					$Container.find('.Year').text(oData.Year);
 					$Container.find('.Poster').html('<img src="' + oData.Poster + '"/>');
 					$Container.find('.Genre').html('<br/><b>Genre</b><p>'+oData.Genre+'</p>');
@@ -301,8 +356,14 @@ function getData()
 					}
 					else
 						$Container.find('.Plot').html("<p style='color:black'>Plot:</p><p style='color:black;display:table;width:40rem'>"+oData.Plot+"</p>");
-				
+				if(type=='series' && document.getElementById("episode-list").style.display=="none")
+				{
+					$('#search_season').remove();
+					$('#containerMovies').append("<br><br><span id='search_season'><b>Search for a season</b> &nbsp<input type='number' id='season'><button class='btb btn-primary' id='sendseason' onClick='list_episodes();'><span class='glyphicon glyphicon-search' style='lineheight:2;'></span></button></span>");
+					
+				}
 			}
 		}
     });    
+	
 }
