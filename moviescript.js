@@ -11,6 +11,19 @@ function changevalue(str)
 	else if(str=="IMDB id")
 		Url='https://www.omdbapi.com/?i=';
 }
+function addRowHandlers() {
+    var rows = document.getElementById("showPages").rows;
+    for (i = 0; i < rows.length; i++) {
+        rows[i].onclick = function(){ return function(){
+               var id = this.cells[2].innerHTML;
+				Url='https://www.omdbapi.com/?i=';
+				document.getElementById("name").value=id;
+				document.getElementById("selecttype").innerHTML="IMDB id";
+				$('#page-results').hide();
+				getData();
+        };}(rows[i]);
+    }
+}
 function yearcheck()
 {
 	if(document.getElementById('year').value.length==4)
@@ -128,13 +141,13 @@ function loadPages()
 					$('.suggest').empty;
 					$('#pageResult').show();
 					oData=$.parseJSON(p_oXHR.responseText);
-					//console.log(oData);
 					for(var i=0;i<10;i++)
 					{
 					if(oData.Search[i].Poster==='N/A')
 						oData.Search[i].Poster='Not available.png';
 					$("#showPages > tbody").append("<tr><td><img src='"+oData.Search[i].Poster+"'></td><td>"+oData.Search[i].Title+"</td><td>"+oData.Search[i].imdbID+"</td><td>"+oData.Search[i].Year+"</td></tr>");
 					}
+					addRowHandlers();
 					if(page>1)
 					$('#page-results').append("<ul id='movePage' class='pager'><li><a href='#' onClick='PageBack();return false;'>Previous</a></li><li><a href='#'onClick='PageAdd();return false;'>Next</a></li></ul>");
 					else
@@ -190,7 +203,7 @@ if(sMovie.length>2)
 									$("#output").append("<li><a href='#' id='result"+i+"' onClick='sendData("+i+");return false;'>"+odata.Search[i].Title+"("+odata.Search[i].Year+")</a></li>");
 							}
 							if(i==10)
-									$("#output").append("<li><a href='#' onClick='loadPages();return false;'>See More</a></li>");
+									$("#output").append("<li><a href='#' onClick='page=1;loadPages();return false;'>See More</a></li>");
 						}
 					}
 					});
